@@ -1,6 +1,7 @@
 name: run-currency-rate-check
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 7 * * 1,4'
 jobs:
