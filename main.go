@@ -16,10 +16,15 @@ func getYyyyMmDd(t time.Time) string {
 }
 
 func getEnvVariable(key string) string {
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatal("can't load .env file!")
+	isLocal := os.Getenv("IS_LOCAL")
+	if isLocal == "true" {
+		fmt.Println("is local")
+		err := godotenv.Load(".env")
+		if err != nil {
+			log.Fatal("can't load .env file!")
+		}
 	}
+
 	return os.Getenv(key)
 }
 

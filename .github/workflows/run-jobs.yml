@@ -15,4 +15,5 @@ jobs:
           go-version-file: 'go.mod'
         env:
           FIXER_API_KEY: ${{ secrets.FIXER_API_KEY }}
+          IS_LOCAL: false
       - run: go run .
