@@ -8,10 +8,10 @@ jobs:
     name: Check currency rate EUR-JPY
     runs-on: ubuntu-latest
     steps:
-      env:
-        FIXER_API_KEY: ${{ secrets.FIXER_API_KEY }}
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
         with:
           go-version-file: 'go.mod'
+        env:
+          FIXER_API_KEY: ${{ secrets.FIXER_API_KEY }}
       - run: go run .
