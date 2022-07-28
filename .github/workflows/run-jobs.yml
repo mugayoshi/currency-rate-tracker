@@ -4,6 +4,9 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 7 * * 1,4'
+env:
+  FIXER_API_KEY: ${{ secrets.FIXER_API_KEY }}
+  IS_LOCAL: false
 jobs:
   check-rate:
     name: Check currency rate EUR-JPY
@@ -13,7 +16,4 @@ jobs:
       - uses: actions/setup-go@v3
         with:
           go-version-file: 'go.mod'
-        env:
-          FIXER_API_KEY: ${{ secrets.FIXER_API_KEY }}
-          IS_LOCAL: false
       - run: go run .

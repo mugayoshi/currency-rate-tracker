@@ -25,7 +25,11 @@ func getEnvVariable(key string) string {
 		}
 	}
 
-	return os.Getenv(key)
+	variable := os.Getenv(key)
+	if variable == "" {
+		log.Fatal(fmt.Sprintf("can't find %s", key))
+	}
+	return variable
 }
 
 func main() {
