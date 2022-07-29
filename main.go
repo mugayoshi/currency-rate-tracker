@@ -2,9 +2,7 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
-	"net/http"
 	"os"
 	"time"
 
@@ -35,25 +33,12 @@ func getEnvVariable(key string) string {
 func main() {
 	now := time.Now()
 
-	startDate := getYyyyMmDd(now)
-	endDate := getYyyyMmDd(now.AddDate(0, 0, -3))
+	startDate := getYyyyMmDd(now.AddDate(0, 0, -3))
+	endDate := getYyyyMmDd(now)
 
-	url := fmt.Sprintf("https://api.apilayer.com/fixer/fluctuation?start_date=%s&end_date=%s&base=EUR&symbols=JPY,USD", startDate, endDate)
-	fmt.Println(url)
+	change := getFluctuationEurJpy(startDate, endDate)
 
-	client := &http.Client{}
-	req, err := http.NewRequest("GET", url, nil)
-	apiKey := getEnvVariable("FIXER_API_KEY")
-	req.Header.Set("apikey", apiKey)
+	text := fmt.Sprintf("EUR/JPY rate %s ~ %s\n¥%f => ¥%f\nchange rate: %f%%", startDate, endDate, change.StartRate, change.EndRate, change.ChangePct)
+	sendMessageToMoneyChannel(text)
 
-	if err != nil {
-		fmt.Println(err)
-	}
-	res, err := client.Do(req)
-	if res.Body != nil {
-		defer res.Body.Close()
-	}
-	body, err := ioutil.ReadAll(res.Body)
-
-	fmt.Println(string(body))
 }
