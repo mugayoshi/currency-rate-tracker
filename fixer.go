@@ -28,9 +28,9 @@ type FluctuationResponse struct {
 	Rates       FluctuationRate `json:"rates"`
 }
 
-func getFluctuationEurJpy(startDate string, endDate string) FluctuationDataCurrency {
+func getFluctuationBaseJpy(startDate string, endDate string, base Currency) FluctuationDataCurrency {
 
-	params := fmt.Sprintf("start_date=%s&end_date=%s&base=EUR&symbols=JPY", startDate, endDate)
+	params := fmt.Sprintf("start_date=%s&end_date=%s&base=%s&symbols=JPY", startDate, endDate, base)
 	body := callFixerApi("fluctuation", params)
 	fmt.Println(string(body))
 	var result FluctuationResponse
@@ -48,9 +48,12 @@ func callFixerApi(path string, params string) []byte {
 	req.Header.Set("apikey", apiKey)
 
 	if err != nil {
-		fmt.Println(err)
+		panic(err)
 	}
 	res, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
 	if res.Body != nil {
 		defer res.Body.Close()
 	}

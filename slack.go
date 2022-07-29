@@ -13,6 +13,9 @@ func sendMessageToMoneyChannel(message string) {
 	url := getEnvVariable("SLACK_WEBHOOK_MONEY")
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
 	req.Header.Set("Content-Type", "application/json")
+	if err != nil {
+		panic(err)
+	}
 
 	client := &http.Client{}
 	resp, err := client.Do(req)

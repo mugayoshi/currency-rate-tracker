@@ -9,6 +9,14 @@ import (
 	"github.com/joho/godotenv"
 )
 
+type Currency string
+
+const (
+	EUR Currency = "EUR"
+	JPY Currency = "JPY"
+	USD Currency = "USD"
+)
+
 func getYyyyMmDd(t time.Time) string {
 	return fmt.Sprintf("%d-%02d-%02d", t.Year(), t.Month(), t.Day())
 }
@@ -25,9 +33,30 @@ func getEnvVariable(key string) string {
 
 	variable := os.Getenv(key)
 	if variable == "" {
-		log.Fatal(fmt.Sprintf("can't find %s", key))
+		log.Fatalf(fmt.Sprintf("can't find %s", key))
 	}
 	return variable
+}
+
+func createCurrencyFluctuationNotificationMessage(base Currency, target Currency, startDate string, endDate string, data FluctuationDataCurrency) string {
+	firstLine := fmt.Sprintf("%s/%s rate", base, target)
+	secondLine := fmt.Sprintf("%s ~ %s", startDate, endDate)
+	getCurrencySymbol := func(currency Currency) string {
+		switch currency {
+		case "EUR":
+			return "€"
+		case "JPY":
+			return "¥"
+		case "USD":
+			return "$"
+		default:
+			return ""
+		}
+	}
+	currencySymbol := getCurrencySymbol(target)
+	thridLine := fmt.Sprintf("%s%f -> %s%f", currencySymbol, data.StartRate, currencySymbol, data.EndRate)
+	fourthLine := fmt.Sprintf("change rate: %f%%", data.ChangePct)
+	return fmt.Sprintf("%s\n%s\n%s\n%s", firstLine, secondLine, thridLine, fourthLine)
 }
 
 func main() {
@@ -36,9 +65,14 @@ func main() {
 	startDate := getYyyyMmDd(now.AddDate(0, 0, -3))
 	endDate := getYyyyMmDd(now)
 
-	change := getFluctuationEurJpy(startDate, endDate)
+	fmt.Println("EUR/JPY")
+	changeEurJpy := getFluctuationBaseJpy(startDate, endDate, EUR)
+	textEurJpy := createCurrencyFluctuationNotificationMessage(EUR, JPY, startDate, endDate, changeEurJpy)
+	sendMessageToMoneyChannel(textEurJpy)
 
-	text := fmt.Sprintf("EUR/JPY rate %s ~ %s\n¥%f => ¥%f\nchange rate: %f%%", startDate, endDate, change.StartRate, change.EndRate, change.ChangePct)
-	sendMessageToMoneyChannel(text)
+	fmt.Println("USD/JPY")
+	changeUsdJpy := getFluctuationBaseJpy(startDate, endDate, USD)
+	textUsdJpy := createCurrencyFluctuationNotificationMessage(USD, JPY, startDate, endDate, changeUsdJpy)
+	sendMessageToMoneyChannel(textUsdJpy)
 
 }
