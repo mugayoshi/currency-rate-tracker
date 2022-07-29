@@ -3,7 +3,7 @@ name: run-currency-rate-check
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 7 * * 1,3,5,7'
+    - cron: '0 7 * * 1,3,5'
 env:
   FIXER_API_KEY: ${{ secrets.FIXER_API_KEY }}
   SLACK_WEBHOOK_MONEY: ${{ secrets.SLACK_WEBHOOK_MONEY }}
