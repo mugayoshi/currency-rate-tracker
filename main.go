@@ -54,9 +54,9 @@ func createCurrencyFluctuationNotificationMessage(base Currency, target Currency
 		}
 	}
 	currencySymbol := getCurrencySymbol(target)
-	thridLine := fmt.Sprintf("%s%f -> %s%f", currencySymbol, data.StartRate, currencySymbol, data.EndRate)
+	thirdLine := fmt.Sprintf("%s%f -> %s%f", currencySymbol, data.StartRate, currencySymbol, data.EndRate)
 	fourthLine := fmt.Sprintf("change rate: %f%%", data.ChangePct)
-	return fmt.Sprintf("%s\n%s\n%s\n%s", firstLine, secondLine, thridLine, fourthLine)
+	return fmt.Sprintf("%s\n%s\n%s\n%s", firstLine, secondLine, thirdLine, fourthLine)
 }
 
 func main() {
