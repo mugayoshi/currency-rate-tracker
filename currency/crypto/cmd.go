@@ -10,11 +10,12 @@ import (
 
 func createNotificationMessage(timestamp int64, btcPrice float32, ethPrice float32) string {
 	now := time.Unix(timestamp, 0).UTC()
-	formattedDate := now.Format("2006 2 Jan Mon")
+	yyyyDdMm := now.Format("2006 2 Jan Mon")
+	hhMmSs := now.Format("15:04:05")
 	englishPrinter := message.NewPrinter(message.MatchLanguage("en"))
 	btc := englishPrinter.Sprintf("¥%.3f", btcPrice)
 	eth := englishPrinter.Sprintf("¥%.3f", ethPrice)
-	return fmt.Sprintf("%s\nBTC: %s\nETH: %s", formattedDate, btc, eth)
+	return fmt.Sprintf("%s %s\nBTC: %s\nETH: %s", yyyyDdMm, hhMmSs, btc, eth)
 }
 
 func CheckRates() {
