@@ -1,10 +1,12 @@
-package main
+package fiat
 
 import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/mugayoshi/currency_rate_tracker/helpers"
 )
 
 type FluctuationDataCurrency struct {
@@ -44,7 +46,7 @@ func callFixerApi(path string, params string) []byte {
 	fmt.Println(url)
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", url, nil)
-	apiKey := getEnvVariable("FIXER_API_KEY")
+	apiKey := helpers.GetEnvVariable("FIXER_API_KEY")
 	req.Header.Set("apikey", apiKey)
 
 	if err != nil {

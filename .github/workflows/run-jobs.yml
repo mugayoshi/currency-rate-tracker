@@ -7,14 +7,24 @@ on:
 env:
   FIXER_API_KEY: ${{ secrets.FIXER_API_KEY }}
   SLACK_WEBHOOK_MONEY: ${{ secrets.SLACK_WEBHOOK_MONEY }}
+  COINLAYER_API_ACCESS_KEY: ${{ secrets.COINLAYER_API_ACCESS_KEY }}
   IS_LOCAL: false
 jobs:
-  check-rate:
-    name: Check currency rate EUR-JPY
+  check-rate-fiat:
+    name: Check currency rate EUR, USD and JPY
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
         with:
           go-version-file: 'go.mod'
-      - run: go run .
+      - run: go run . -type=fiat
+  check-rate-crypto:
+    name: Check currency rate crypto
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version-file: 'go.mod'
+      - run: go run . -type=crypto

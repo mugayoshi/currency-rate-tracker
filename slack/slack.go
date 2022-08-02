@@ -1,16 +1,18 @@
-package main
+package slack
 
 import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/mugayoshi/currency_rate_tracker/helpers"
 )
 
-func sendMessageToMoneyChannel(message string) {
+func SendMessageToMoneyChannel(message string) {
 	messageValue := fmt.Sprintf(`{"text":"%s"}`, message)
 	var jsonStr = []byte(messageValue)
-	url := getEnvVariable("SLACK_WEBHOOK_MONEY")
+	url := helpers.GetEnvVariable("SLACK_WEBHOOK_MONEY")
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
 	req.Header.Set("Content-Type", "application/json")
 	if err != nil {
