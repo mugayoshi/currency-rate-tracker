@@ -35,7 +35,7 @@ func getLiveData(target string, symbols []string) CryptoCurrencyLiveData {
 
 func callCoinlayerApi(path string, params string) []byte {
 	url := fmt.Sprintf("http://api.coinlayer.com//%s?%s", path, params)
-	fmt.Println(url)
+
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", url, nil)
 
