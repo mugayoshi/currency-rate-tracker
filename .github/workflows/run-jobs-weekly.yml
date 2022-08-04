@@ -1,0 +1,20 @@
+name: currency-rate-check-weekly
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 7 * * 3'
+env:
+  SLACK_WEBHOOK_MONEY: ${{ secrets.SLACK_WEBHOOK_MONEY }}
+  COINLAYER_API_ACCESS_KEY: ${{ secrets.COINLAYER_API_ACCESS_KEY }}
+  IS_LOCAL: false
+jobs:
+  check-rate-crypto:
+    name: Check currency rate crypto
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version-file: 'go.mod'
+      - run: go run . -type=crypto -frequency=weekly

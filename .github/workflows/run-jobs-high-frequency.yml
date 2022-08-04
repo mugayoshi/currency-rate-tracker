@@ -1,4 +1,4 @@
-name: run-currency-rate-check
+name: currency-rate-check-high-frequency
 
 on:
   workflow_dispatch:
@@ -18,7 +18,7 @@ jobs:
       - uses: actions/setup-go@v3
         with:
           go-version-file: 'go.mod'
-      - run: go run . -type=fiat
+      - run: go run . -type=fiat -frequency=high
   check-rate-crypto:
     name: Check currency rate crypto
     runs-on: ubuntu-latest
@@ -27,4 +27,4 @@ jobs:
       - uses: actions/setup-go@v3
         with:
           go-version-file: 'go.mod'
-      - run: go run . -type=crypto
+      - run: go run . -type=crypto -frequency=high

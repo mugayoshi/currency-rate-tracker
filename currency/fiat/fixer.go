@@ -30,7 +30,7 @@ type FluctuationResponse struct {
 	Rates       FluctuationRate `json:"rates"`
 }
 
-func getFluctuationBaseJpy(startDate string, endDate string, base Currency) FluctuationDataCurrency {
+func getFluctuationBaseJpy(startDate string, endDate string, base string) FluctuationDataCurrency {
 
 	params := fmt.Sprintf("start_date=%s&end_date=%s&base=%s&symbols=JPY", startDate, endDate, base)
 	body := callFixerApi("fluctuation", params)

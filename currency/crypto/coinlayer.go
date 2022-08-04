@@ -21,6 +21,13 @@ type CryptoCurrencyLiveData struct {
 	Timestamp int64               `json:"timestamp"`
 }
 
+type CryptoCurrencyHistoricalData struct {
+	Target    string              `json:"target"`
+	Rates     CryptoCurrencyRates `json:"rates"`
+	Timestamp int64               `json:"timestamp"`
+	Date      string              `json:"date"`
+}
+
 func getLiveData(target string, symbols []string) CryptoCurrencyLiveData {
 	symbolArray := strings.Join(symbols, ",")
 	accessKey := helpers.GetEnvVariable("COINLAYER_API_ACCESS_KEY")
@@ -29,6 +36,16 @@ func getLiveData(target string, symbols []string) CryptoCurrencyLiveData {
 	body := callCoinlayerApi(apiPath, apiParams)
 	var result CryptoCurrencyLiveData
 
+	json.Unmarshal(body, &result)
+	return result
+}
+
+func getHistoricalData(yyyyMmDd string, target string, symbols []string) CryptoCurrencyHistoricalData {
+	symbolArray := strings.Join(symbols, ",")
+	accessKey := helpers.GetEnvVariable("COINLAYER_API_ACCESS_KEY")
+	apiParams := fmt.Sprintf("access_key=%s&target=%s&symbols=%s", accessKey, target, symbolArray)
+	body := callCoinlayerApi(yyyyMmDd, apiParams)
+	var result CryptoCurrencyHistoricalData
 	json.Unmarshal(body, &result)
 	return result
 }
