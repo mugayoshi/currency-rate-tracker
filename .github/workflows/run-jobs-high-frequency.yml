@@ -9,6 +9,9 @@ env:
   SLACK_WEBHOOK_MONEY: ${{ secrets.SLACK_WEBHOOK_MONEY }}
   COINLAYER_API_ACCESS_KEY: ${{ secrets.COINLAYER_API_ACCESS_KEY }}
   IS_LOCAL: false
+  DYNAMO_API: ${{ secrets.DYNAMO_API }}
+  DYNAMO_SECRET: ${{ secrets.DYNAMO_SECRET }}
+  DYNAMO_REGION: ${{ secrets.DYNAMO_REGION }}
 jobs:
   check-rate-fiat:
     name: Check currency rate EUR, USD and JPY
