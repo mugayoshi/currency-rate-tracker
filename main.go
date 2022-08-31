@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
+	"time"
 
 	cryptoCurrency "github.com/mugayoshi/currency_rate_tracker/currency/crypto"
 	"github.com/mugayoshi/currency_rate_tracker/currency/fiat"
@@ -58,6 +60,7 @@ func runCommandFiat(frequency string) {
 }
 
 func main() {
+	start := time.Now()
 
 	ct := flag.String(COMMAND_ARGS.currencyType, "", "command type")
 	f := flag.String(COMMAND_ARGS.frequency, "", "frequency")
@@ -66,9 +69,9 @@ func main() {
 	switch *ct {
 	case COMMAND_TYPE.fiat:
 		runCommandFiat(*f)
-		return
 	case COMMAND_TYPE.crypto:
 		runCommandCrypto(*f)
 	}
+	log.Printf("\nmain: execution time: %s\n", time.Since(start))
 
 }

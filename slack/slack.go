@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"strings"
 
 	"github.com/mugayoshi/currency_rate_tracker/helpers"
 )
@@ -25,7 +27,10 @@ func SendMessageToMoneyChannel(message string) {
 		panic(err)
 	}
 	defer resp.Body.Close()
-	fmt.Println("response Status:", resp.Status)
+	log.Println("response Status:", resp.Status)
 	body, _ := ioutil.ReadAll(resp.Body)
-	fmt.Println("response Body:", string(body))
+	log.Println("response Body:", string(body))
+	if strings.Contains(resp.Status, "200") {
+		log.Println("successfully sent a message to Slack.")
+	}
 }

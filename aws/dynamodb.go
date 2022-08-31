@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/credentials"
@@ -56,7 +57,7 @@ func GetCurrencyItem(client *dynamodb.Client, currency string) (CurrencyData, er
 		var d CurrencyData
 		return d, errors.New("not found")
 	}
-	fmt.Printf("%+v\n", item.Item)
+	// fmt.Printf("%+v\n", item.Item)
 	actual := ResponseJson{}
 	e := attributevalue.UnmarshalMap(item.Item, &actual)
 	if e != nil {
@@ -68,11 +69,13 @@ func GetCurrencyItem(client *dynamodb.Client, currency string) (CurrencyData, er
 }
 
 func updateItemBase(client *dynamodb.Client, input *dynamodb.UpdateItemInput) (bool, error) {
+	log.Panicln("update dynamo db")
 	_, err := client.UpdateItem(context.TODO(), input)
 	if err != nil {
 		fmt.Printf("%+v\n", err)
 		return false, errors.New("update api error")
 	}
+	log.Println("update dynamo db is done")
 	return true, nil
 }
 

@@ -2,6 +2,7 @@ package fiat
 
 import (
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
@@ -54,7 +55,14 @@ func SendCurrencyUpdates() {
 	jpy := fiat.Jpy
 	dbClient := aws.GetDynamoDbClient()
 	targetCurrencies := []string{fiat.Eur, fiat.Usd}
+
+	var wg sync.WaitGroup
 	for _, c := range targetCurrencies {
-		sendUpdateToSlack(startDate, endDate, c, jpy, dbClient)
+		wg.Add(1)
+		go func(target string) {
+			defer wg.Done()
+			sendUpdateToSlack(startDate, endDate, target, jpy, dbClient)
+		}(c)
 	}
+	wg.Wait()
 }
