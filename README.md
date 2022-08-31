@@ -1,5 +1,5 @@
 # currency rate tracker
-This tool regularly checks currency rate and send a notification to Slack.
+This tool regularly checks currency rate and sends notifications to [Slack](https://slack.com/).
 
 It supports fiat and crypto currencies.
 
