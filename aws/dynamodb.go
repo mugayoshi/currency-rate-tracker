@@ -69,7 +69,7 @@ func GetCurrencyItem(client *dynamodb.Client, currency string) (CurrencyData, er
 }
 
 func updateItemBase(client *dynamodb.Client, input *dynamodb.UpdateItemInput) (bool, error) {
-	log.Panicln("update dynamo db")
+	log.Println("update dynamo db")
 	_, err := client.UpdateItem(context.TODO(), input)
 	if err != nil {
 		fmt.Printf("%+v\n", err)

@@ -72,6 +72,6 @@ func main() {
 	case COMMAND_TYPE.crypto:
 		runCommandCrypto(*f)
 	}
-	log.Printf("\nmain: execution time: %s\n", time.Since(start))
+	log.Printf("main: execution time: %s\n", time.Since(start))
 
 }
