@@ -2,6 +2,7 @@ package fiat
 
 import (
 	"fmt"
+	"strconv"
 	"sync"
 	"time"
 
@@ -24,6 +25,19 @@ func createCurrencyFluctuationNotificationMessage(base string, target string, st
 func sendUpdateToSlack(startDate, endDate, targetCurrency, baseCurrency string, dbClient *dynamodb.Client) {
 	change := getFluctuationBaseJpy(startDate, endDate, targetCurrency)
 	text := createCurrencyFluctuationNotificationMessage(targetCurrency, baseCurrency, startDate, endDate, change)
+	threshold := func(target string) float32 {
+		t := helpers.GetEnvVariable(fmt.Sprintf("THRESHOLD_%s", targetCurrency))
+		f, e := strconv.ParseFloat(t, 32)
+		if e != nil {
+			fmt.Println("cannot get threshold value")
+			return 0
+		}
+		return float32(f)
+	}(targetCurrency)
+
+	if change.EndRate < threshold {
+		text = fmt.Sprintf("%s\nit's below %f", text, threshold)
+	}
 	currentItem, getErr := aws.GetCurrencyItem(dbClient, targetCurrency)
 	if getErr != nil {
 		fmt.Println("couldn't get the last data")
@@ -36,12 +50,10 @@ func sendUpdateToSlack(startDate, endDate, targetCurrency, baseCurrency string, 
 		fmt.Println("couldn't update the last data")
 		return
 	}
-	if !isMinimumRate {
-		slack.SendMessageToMoneyChannel(text)
-		return
+	if isMinimumRate {
+		text = fmt.Sprintf("%s\n!!Minimum rate: %f!!", text, change.EndRate)
 	}
-	message := fmt.Sprintf("%s\n!!Minimum rate: %f!!", text, change.EndRate)
-	slack.SendMessageToMoneyChannel(message)
+	slack.SendMessageToMoneyChannel(text)
 	aws.UpdateMinimumRate(dbClient, targetCurrency, change.EndRate, endDate)
 }
 
