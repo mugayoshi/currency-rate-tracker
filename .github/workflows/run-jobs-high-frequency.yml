@@ -12,6 +12,8 @@ env:
   DYNAMO_API: ${{ secrets.DYNAMO_API }}
   DYNAMO_SECRET: ${{ secrets.DYNAMO_SECRET }}
   DYNAMO_REGION: ${{ secrets.DYNAMO_REGION }}
+  THRESHOLD_EUR: ${{ secrets.THRESHOLD_EUR }}
+  THRESHOLD_USD: ${{ secrets.THRESHOLD_USD }}
 jobs:
   check-rate-fiat:
     name: Check currency rate EUR, USD and JPY
