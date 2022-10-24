@@ -52,9 +52,10 @@ func sendUpdateToSlack(startDate, endDate, targetCurrency, baseCurrency string, 
 	}
 	if isMinimumRate {
 		text = fmt.Sprintf("%s\n!!Minimum rate: %f!!", text, change.EndRate)
+		aws.UpdateMinimumRate(dbClient, targetCurrency, change.EndRate, endDate)
 	}
 	slack.SendMessageToMoneyChannel(text)
-	aws.UpdateMinimumRate(dbClient, targetCurrency, change.EndRate, endDate)
+
 }
 
 func SendCurrencyUpdates() {
